@@ -27,7 +27,7 @@ function generateTeams() {
     teamElement.classList.add('team');
     teamElement.innerHTML = `<h2>Time ${index + 1} - Habilidade Média: ${averageSkill.toFixed(2)}</h2>`;
     team.players.forEach(player => {
-      teamElement.innerHTML += `<p>${player.name}: ${player.skill}</p>`;
+      teamElement.innerHTML += `<p>${player.name}</p>`;
     });
     teamContainer.appendChild(teamElement);
   });
