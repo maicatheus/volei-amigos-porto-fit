@@ -2,7 +2,7 @@ function generateTeams() {
   const playerList = document.getElementById('playerList').value.trim().split('\n');
   const numTeams = parseInt(document.getElementById('numTeams').value);
   let players = playerList.map(player => {
-    const [name, skill] = player.split('-');
+    const [_ , name, skill] = player.split('-');
     return { name: name.trim(), skill: parseInt(skill.trim()) };
   });
 
