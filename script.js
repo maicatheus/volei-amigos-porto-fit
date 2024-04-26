@@ -1,8 +1,20 @@
 function generateTeams() {
-  const playerList = document.getElementById('playerList').value.trim().split('\n');
+  const teamContainer = document.getElementById('teamContainer');
+  teamContainer.innerHTML = '';
+
+  const playerList = document.getElementById('playerList').value.trim();
   const numTeams = parseInt(document.getElementById('numTeams').value);
-  let players = playerList.map(player => {
-    const [_ , name, skill] = player.split('-');
+  
+  const invalidLine = validatePlayerList(playerList);
+
+  if (invalidLine.number !== 0) {
+    const errorDiv = document.getElementById('error');
+    errorDiv.innerText = `Erro: Formato errado \n(${invalidLine.content})\n\n Lembre-se:\n - <nome> - <habilidade>.`;
+    return;
+  }
+
+  let players = playerList.split('\n').map(player => {
+     const [_ , name, skill] = player.split(/\s*-\s*/);
     return { name: name.trim(), skill: parseInt(skill.trim()) };
   });
 
@@ -18,9 +30,6 @@ function generateTeams() {
     teams[teamIndex].totalSkill += player.skill;
   });
 
-  const teamContainer = document.getElementById('teamContainer');
-  teamContainer.innerHTML = '';
-
   teams.forEach((team, index) => {
     const averageSkill = team.totalSkill / team.players.length;
     const teamElement = document.createElement('div');
@@ -31,6 +40,24 @@ function generateTeams() {
     });
     teamContainer.appendChild(teamElement);
   });
+
+  const errorDiv = document.getElementById('error');
+  errorDiv.innerText = '';
+}
+
+function validatePlayerList(playerList) {
+  const lines = playerList.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.length === 0) {
+      return { number: i + 1, content: '' }; 
+    }
+
+    if (!/^-.*\s*-\s*\d+$/.test(line)) {
+      return { number: i + 1, content: line };
+    }
+  }
+  return { number: 0, content: '' }; 
 }
 
 function shuffleArray(array) {
